@@ -39,4 +39,13 @@ public class LeaveApplicationService {
         }
     }
 
+    public LeaveApplication getApplication(Long id) {
+        LeaveApplication leaveApplication = leaveApplicationRepo.getApplication(id);
+        if(leaveApplication != null){
+            return leaveApplication;
+        }
+        else{
+            return null;
+        }
+    }
 }

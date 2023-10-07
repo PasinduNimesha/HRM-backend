@@ -28,9 +28,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable()
                 .authorizeRequests()
-                .antMatchers("/login").permitAll()
-                .antMatchers("/users").permitAll()// Allow login endpoint
-                .antMatchers("/employees").hasRole("ADMIN")
+                .antMatchers("/login").permitAll()// Allow all endpoints under /login to be accessed publicly
+                .antMatchers("/users").permitAll()
+                .antMatchers("/employees/**").hasAuthority("ADMIN") // Allow all endpoints under /employees to only ADMIN
+                .antMatchers("/leaveapplication/**").hasAuthority("USER") // Allow all endpoints under /leaveapplication to only USER
                 .anyRequest().authenticated()
                 .and()
                 .addFilterBefore(new JwtAuthenticationFilter(authenticationManager(), jwtUtil), UsernamePasswordAuthenticationFilter.class);

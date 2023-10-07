@@ -17,7 +17,6 @@ public class User {
     private String username;
     private String password;
     private String employee_id;
-    private String salt;
     private String role;
 
 }

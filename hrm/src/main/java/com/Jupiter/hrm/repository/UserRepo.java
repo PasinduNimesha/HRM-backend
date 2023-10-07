@@ -22,12 +22,11 @@ public class UserRepo {
     }
     public void save(User user){
         try{
-            String sqlQuery = "INSERT INTO user (username, password, employee_id, salt) VALUES (?, ?, ?, ?)";
+            String sqlQuery = "INSERT INTO user (username, password, employee_id, salt) VALUES (?, ?, ?)";
             PreparedStatement preparedStatement = connection.prepareStatement(sqlQuery);
             preparedStatement.setString(1, user.getUsername());
             preparedStatement.setString(2, user.getPassword());
             preparedStatement.setString(3, user.getEmployee_id());
-            preparedStatement.setString(4, user.getSalt());
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -129,7 +128,6 @@ public class UserRepo {
             user.setUsername(resultSet.getString("username"));
             user.setPassword(resultSet.getString("password"));
             user.setEmployee_id(resultSet.getString("employee_id"));
-            user.setSalt(resultSet.getString("salt"));
             user.setRole(resultSet.getString("role"));
         } catch (SQLException e) {
             throw new RuntimeException(e);

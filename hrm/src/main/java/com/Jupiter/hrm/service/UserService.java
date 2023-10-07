@@ -75,8 +75,6 @@ public class UserService {
             return null;
         }
 
-
-        // Verify the entered password using PasswordHasher.verifyPassword
         if (encoder.matches(password, user.getPassword())) {
             return user;
         } else {

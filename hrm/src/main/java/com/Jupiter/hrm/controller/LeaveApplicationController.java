@@ -41,4 +41,15 @@ public class LeaveApplicationController {
             return HttpStatus.NOT_FOUND;
         }
     }
+
+    @GetMapping("/get-application/{id}")
+    public LeaveApplication getApplication(@PathVariable Long id) {
+        LeaveApplication leaveApplication = leaveApplicationService.getApplication(id);
+        if(leaveApplication != null){
+            return leaveApplication;
+        }
+        else{
+            return null;
+        }
+    }
 }

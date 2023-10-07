@@ -33,9 +33,9 @@ public class JwtAuthenticationFilter extends BasicAuthenticationFilter {
             try {
                 String username = jwtUtil.extractUsername(token);
                 String role = jwtUtil.extractRole(token); // Extract the role from the token as a String
+                System.out.println("Username and role: " + username + " " + role);
 
                 if (username != null) {
-                    // Create a list of authorities with the extracted role
                     List<GrantedAuthority> authorities = new ArrayList<>();
                     authorities.add(new SimpleGrantedAuthority(role));
 
@@ -43,7 +43,7 @@ public class JwtAuthenticationFilter extends BasicAuthenticationFilter {
                     SecurityContextHolder.getContext().setAuthentication(authentication);
                 }
             } catch (Exception e) {
-                // Handle token validation errors, e.g., expired or malformed tokens
+                System.out.println("Invalid token");
             }
         }
 
