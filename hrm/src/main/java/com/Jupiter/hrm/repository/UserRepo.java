@@ -130,6 +130,7 @@ public class UserRepo {
             user.setPassword(resultSet.getString("password"));
             user.setEmployee_id(resultSet.getString("employee_id"));
             user.setSalt(resultSet.getString("salt"));
+            user.setRole(resultSet.getString("role"));
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }

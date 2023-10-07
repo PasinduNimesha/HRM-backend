@@ -2,11 +2,10 @@ package com.Jupiter.hrm.entity;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.security.core.GrantedAuthority;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.util.List;
 
 @Setter
 @Getter
@@ -19,5 +18,6 @@ public class User {
     private String password;
     private String employee_id;
     private String salt;
+    private String role;
 
 }
