@@ -27,6 +27,9 @@ public class JwtAuthenticationFilter extends BasicAuthenticationFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws IOException, ServletException {
         String header = request.getHeader("Authorization");
+        String host = request.getHeader("Host");
+        System.out.println("Host: " + host);
+
 
         if (header != null && header.startsWith("Bearer ")) {
             String token = header.substring(7); // Remove "Bearer " prefix
@@ -37,10 +40,14 @@ public class JwtAuthenticationFilter extends BasicAuthenticationFilter {
 
                 if (username != null) {
                     List<GrantedAuthority> authorities = new ArrayList<>();
+
                     authorities.add(new SimpleGrantedAuthority(role));
 
                     UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(username, null, authorities);
+
                     SecurityContextHolder.getContext().setAuthentication(authentication);
+
+
                 }
             } catch (Exception e) {
                 System.out.println("Invalid token");

@@ -28,13 +28,19 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable()
                 .authorizeRequests()
-                .antMatchers("/login").permitAll()// Allow all endpoints under /login to be accessed publicly
-                .antMatchers("/users").permitAll()
-                .antMatchers("/employees/**").hasAuthority("ADMIN") // Allow all endpoints under /employees to only ADMIN
-                .antMatchers("/leaveapplication/**").hasAuthority("USER") // Allow all endpoints under /leaveapplication to only USER
-                .anyRequest().authenticated()
+                .antMatchers("/login/**").permitAll()
+                .antMatchers("/employees/**").hasAuthority("ADMIN")
+
+
+
+
                 .and()
-                .addFilterBefore(new JwtAuthenticationFilter(authenticationManager(), jwtUtil), UsernamePasswordAuthenticationFilter.class);
+                .addFilterBefore(new JwtAuthenticationFilter(authenticationManager(), jwtUtil), UsernamePasswordAuthenticationFilter.class)
+                .cors().and().antMatcher("/**").authorizeRequests().anyRequest().permitAll()
+                ;
+
+
+
     }
 
 }

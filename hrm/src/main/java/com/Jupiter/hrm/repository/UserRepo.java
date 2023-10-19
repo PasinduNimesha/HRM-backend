@@ -22,11 +22,13 @@ public class UserRepo {
     }
     public void save(User user){
         try{
-            String sqlQuery = "INSERT INTO user (username, password, employee_id, salt) VALUES (?, ?, ?)";
+            String sqlQuery = "INSERT INTO user (level, username, password, employee_id, role) VALUES (?, ?, ?, ?, ?)";
             PreparedStatement preparedStatement = connection.prepareStatement(sqlQuery);
-            preparedStatement.setString(1, user.getUsername());
-            preparedStatement.setString(2, user.getPassword());
-            preparedStatement.setString(3, user.getEmployee_id());
+            preparedStatement.setInt(1, user.getLevel());
+            preparedStatement.setString(2, user.getUsername());
+            preparedStatement.setString(3, user.getPassword());
+            preparedStatement.setInt(4, user.getEmployee_id());
+            preparedStatement.setString(5, user.getRole());
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -125,9 +127,10 @@ public class UserRepo {
     private User getUser(User user, ResultSet resultSet){
         try {
             user.setUser_id(resultSet.getLong("user_id"));
+            user.setLevel(resultSet.getInt("level"));
             user.setUsername(resultSet.getString("username"));
             user.setPassword(resultSet.getString("password"));
-            user.setEmployee_id(resultSet.getString("employee_id"));
+            user.setEmployee_id(resultSet.getInt("employee_id"));
             user.setRole(resultSet.getString("role"));
         } catch (SQLException e) {
             throw new RuntimeException(e);

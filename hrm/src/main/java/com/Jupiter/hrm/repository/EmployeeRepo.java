@@ -19,13 +19,18 @@ public class EmployeeRepo {
     }
     public Long save(Employee employee){
         try{
-            String sqlQuery = "INSERT INTO employee (name, birthdate, marital_status, emergency_contact, organization_id) VALUES (?, ?, ?, ?, ?)";
+            String sqlQuery = "INSERT INTO employee (name, birthdate, marital_status, emergency_contact_id, job_id, gender, address, employment_status_id, supervisor, branch_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
             PreparedStatement preparedStatement = connection.prepareStatement(sqlQuery, Statement.RETURN_GENERATED_KEYS);
             preparedStatement.setString(1, employee.getName());
             preparedStatement.setString(2, employee.getBirthdate());
-            preparedStatement.setBoolean(3, employee.isMarital_status());
-            preparedStatement.setString(4, employee.getEmergency_contact());
-            preparedStatement.setString(5, employee.getOrganization_id());
+            preparedStatement.setString(3, employee.getMarital_status());
+            preparedStatement.setInt(4, employee.getEmergency_contact_id());
+            preparedStatement.setInt(5, employee.getJob_id());
+            preparedStatement.setString(6, employee.getGender());
+            preparedStatement.setString(7, employee.getAddress());
+            preparedStatement.setInt(8, employee.getEmployment_status_id());
+            preparedStatement.setInt(9, employee.getSupervisor());
+            preparedStatement.setInt(10, employee.getBranch_id());
             int rowsInserted = preparedStatement.executeUpdate();
 
 
@@ -65,27 +70,9 @@ public class EmployeeRepo {
         return employeeList;
     }
 
-    public Employee findByEmployeenameAndPassword(String employeename, String password) {
-        Employee employee = null;
 
-        try {
-            String sqlQuery = "SELECT * FROM employee WHERE employeename = ? AND password = ?";
-            PreparedStatement preparedStatement = connection.prepareStatement(sqlQuery);
-            preparedStatement.setString(1, employeename);
-            preparedStatement.setString(2, password);
-            ResultSet resultSet = preparedStatement.executeQuery();
 
-            if (resultSet.next()) {
-                employee = getEmployee(new Employee(), resultSet);
-            }
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-
-        return employee;
-    }
-
-    public Optional<Employee> findById(Long employeeID){
+    public Optional<Employee> findById(int employeeID){
         Employee employee = null;
 
         try {
@@ -122,9 +109,14 @@ public class EmployeeRepo {
             employee.setEmployee_id(resultSet.getInt("employee_id"));
             employee.setName(resultSet.getString("name"));
             employee.setBirthdate(resultSet.getString("birthdate"));
-            employee.setEmergency_contact(resultSet.getString("emergency_contact"));
-            employee.setMarital_status(resultSet.getBoolean("marital_status"));
-            employee.setOrganization_id(resultSet.getString("organization_id"));
+            employee.setEmergency_contact_id(resultSet.getInt("emergency_contact_id"));
+            employee.setMarital_status(resultSet.getString("marital_status"));
+            employee.setJob_id(resultSet.getInt("job_id"));
+            employee.setGender(resultSet.getString("gender"));
+            employee.setAddress(resultSet.getString("address"));
+            employee.setEmployment_status_id(resultSet.getInt("employment_status_id"));
+            employee.setSupervisor(resultSet.getInt("supervisor"));
+            employee.setBranch_id(resultSet.getInt("branch_id"));
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -133,10 +125,20 @@ public class EmployeeRepo {
 
     public void update(Employee employee) {
         try {
-            String sqlQuery = "UPDATE employee SET employeename = ?, password = ? where employee_id = ?";
+            String sqlQuery = "UPDATE employee SET name = ?, birthdate = ?, marital_status = ?, emergency_contact_id = ?, job_id = ?, gender = ?, address = ?, employment_status_id = ?, supervisor = ?, branch_id = ? where employee_id = ?";
             PreparedStatement preparedStatement = connection.prepareStatement(sqlQuery);
             preparedStatement.setString(1, employee.getName());
-            preparedStatement.setInt(3, employee.getEmployee_id());
+            preparedStatement.setString(2, employee.getBirthdate());
+            preparedStatement.setString(3, employee.getMarital_status());
+            preparedStatement.setInt(4, employee.getEmergency_contact_id());
+            preparedStatement.setInt(5, employee.getJob_id());
+            preparedStatement.setString(6, employee.getGender());
+            preparedStatement.setString(7, employee.getAddress());
+            preparedStatement.setInt(8, employee.getEmployment_status_id());
+            preparedStatement.setInt(9, employee.getSupervisor());
+            preparedStatement.setInt(10, employee.getBranch_id());
+            preparedStatement.setInt(11, employee.getEmployee_id());
+            System.out.println("id :" + employee.getEmployee_id());
             preparedStatement.executeUpdate();
             int rowsUpdated = preparedStatement.executeUpdate();
 
@@ -144,6 +146,23 @@ public class EmployeeRepo {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+    }
+
+
+    public List<Integer> getEmployeeIds(){
+        try{
+            String sqlQuery = "SELECT employee_id FROM employee";
+            PreparedStatement preparedStatement = connection.prepareStatement(sqlQuery);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            List<Integer> employeeIds = new ArrayList<>();
+            while (resultSet.next()) {
+                employeeIds.add(resultSet.getInt("employee_id"));
+            }
+            return employeeIds;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
     }
 
 }
