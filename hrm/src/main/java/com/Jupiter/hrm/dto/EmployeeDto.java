@@ -12,9 +12,14 @@ public class EmployeeDto {
     private int employee_id;
     private String name;
     private String birthdate;
-    private boolean marital_status;
-    private String emergency_contact;
-    private String organization_id;
+    private String marital_status;
+    private int emergency_contact_id;
+    private int job_id;
+    private String gender;
+    private String address;
+    private int employment_status_id;
+    private int supervisor;
+    private int branch_id;
     private Map<String, Integer> int_attributes = new HashMap<>();
     private Map<String, String> str_attributes = new HashMap<>();
     private Map<String, Double> double_attributes = new HashMap<>();

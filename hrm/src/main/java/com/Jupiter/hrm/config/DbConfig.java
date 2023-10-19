@@ -9,7 +9,7 @@ public class DbConfig {
         Connection con = null;
 
         try {
-            con = DriverManager.getConnection("jdbc:mysql://localhost:3306/jupiter", "root", "30104771");
+            con = DriverManager.getConnection("jdbc:mysql://localhost:3306/hrms_db", "root", "30104771");
             System.out.println("Connection success");
         } catch (SQLException e) {
             e.printStackTrace();

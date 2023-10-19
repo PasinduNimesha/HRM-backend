@@ -26,12 +26,13 @@ public class EmployeeService {
 
     public List<Employee> getAllEmployees(){return  employeeRepo.findAllEmployees();}
 
-    public Employee getEmployeeById(Long id){
+    public Employee getEmployeeById(int id){
         Optional<Employee> optionalEmployee = employeeRepo.findById(id);
         return optionalEmployee.orElse(null);
     }
 
-    public boolean updateEmployee(Long id, Employee updatedEmployee) {
+    public boolean updateEmployee(int id, Employee updatedEmployee) {
+        updatedEmployee.setEmployee_id(id);
         Optional<Employee> optionalEmployee = employeeRepo.findById(id);
         if (optionalEmployee.isPresent()) {
             Employee employee = optionalEmployee.get();
@@ -43,7 +44,7 @@ public class EmployeeService {
         }
     }
 
-    public boolean deleteEmployee(Long id){
+    public boolean deleteEmployee(int id){
         Optional<Employee> optionalEmployee = employeeRepo.findById(id);
         if(optionalEmployee.isPresent()){
             employeeRepo.delete(optionalEmployee.get());
@@ -54,13 +55,5 @@ public class EmployeeService {
         }
     }
 
-    public Employee findByEmployeenameAndPassword(String employeename, String password) {
-        Employee employee = employeeRepo.findByEmployeenameAndPassword(employeename, password);
-        if(employee == null){
-            return null;
-        }
-        else{
-            return employee;
-        }
-    }
+
 }

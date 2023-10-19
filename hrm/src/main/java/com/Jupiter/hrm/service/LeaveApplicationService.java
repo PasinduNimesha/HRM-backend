@@ -48,4 +48,13 @@ public class LeaveApplicationService {
             return null;
         }
     }
+
+    public boolean deleteApplication(Long id) {
+        if(leaveApplicationRepo.deleteApplication(id)){
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
 }

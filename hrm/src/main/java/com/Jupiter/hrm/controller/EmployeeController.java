@@ -10,6 +10,8 @@ import org.modelmapper.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PostAuthorize;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import java.lang.reflect.Type;
 import java.util.List;
@@ -17,8 +19,10 @@ import java.util.Map;
 import java.util.Set;
 
 
+@CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/employees")
+
 public class EmployeeController {
     private final EmployeeService employeeService;
     private final EmployeeExtensionService employeeExtensionService;
@@ -34,11 +38,8 @@ public class EmployeeController {
     @PostMapping
     public HttpStatus createEmployee(@RequestBody EmployeeDto employeeDto) {
         int employee_id = employeeDto.getEmployee_id();
-        System.out.println(employeeDto.getEmployee_id());
-        System.out.println(employeeDto.getName());
-        System.out.println(employeeDto.getEmergency_contact());
         Long id = employeeService.createEmployee(modelMapper.map(employeeDto, Employee.class));
-        employeeExtensionService.createEmployeeExtension(employeeDto.getInt_attributes(), employeeDto.getStr_attributes(), employeeDto.getDouble_attributes(), id);
+//        employeeExtensionService.createEmployeeExtension(employeeDto.getInt_attributes(), employeeDto.getStr_attributes(), employeeDto.getDouble_attributes(), id);
 //        if(employeeDto.getInt_attributes() != null){
 //            for (Map.Entry<String, Integer> entry : employeeDto.getInt_attributes().entrySet()) {
 //                String key = entry.getKey();
@@ -65,6 +66,13 @@ public class EmployeeController {
 //        }
         return HttpStatus.CREATED;
     }
+    @GetMapping
+//    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<List<Employee>> getAllEmployees() {
+        List<Employee> employees = employeeService.getAllEmployees();
+        return new ResponseEntity<>(employees, HttpStatus.OK);
+    }
+
 
 
     @PostMapping("/add-attribute")
@@ -75,7 +83,8 @@ public class EmployeeController {
 
 
     @GetMapping("/{id}")
-    public ResponseEntity<EmployeeDto> getEmployeeById(@PathVariable Long id) {
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<EmployeeDto> getEmployeeById(@PathVariable int id) {
         EmployeeDto employee = modelMapper.map(employeeService.getEmployeeById(id), EmployeeDto.class);
         return new ResponseEntity<>(employee, HttpStatus.OK);
 
@@ -83,7 +92,9 @@ public class EmployeeController {
 
 
     @PutMapping("/{id}")
-    public HttpStatus updateEmployee(@PathVariable Long id, @RequestBody EmployeeDto updatedEmployee) {
+    @PreAuthorize("hasRole('ADMIN')")
+    public HttpStatus updateEmployee(@PathVariable int id, @RequestBody EmployeeDto updatedEmployee) {
+        System.out.println(updatedEmployee.getEmergency_contact_id());
         if(employeeService.updateEmployee(id, modelMapper.map(updatedEmployee, Employee.class))){
             return HttpStatus.OK;
         }
@@ -95,7 +106,8 @@ public class EmployeeController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteEmployee(@PathVariable Long id) {
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<Void> deleteEmployee(@PathVariable int id) {
         boolean deleted = employeeService.deleteEmployee(id);
         if(deleted){
             return new ResponseEntity<>(HttpStatus.OK);
@@ -104,10 +116,6 @@ public class EmployeeController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
-    }
-    @PostMapping("/login")
-    public ResponseEntity<?> loginEmployee(@RequestBody EmployeeDto employeeDto) {
-        return null;
     }
 
     @GetMapping("/attributes")

@@ -17,8 +17,15 @@ public class Employee {
     private int employee_id;
     private String name;
     private String birthdate;
-    private boolean marital_status;
-    private String emergency_contact;
-    private String organization_id;
+    private String marital_status;
+    private int emergency_contact_id;
+
+    //new attributes
+    private int job_id;
+    private String gender;
+    private String address;
+    private int employment_status_id;
+    private int supervisor;
+    private int branch_id;
 
 }

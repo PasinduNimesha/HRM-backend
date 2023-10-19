@@ -22,17 +22,36 @@ public class LeaveApplicationController {
 
 
 
-    @PutMapping("/update-application")
-    public HttpStatus updateApplication(@RequestBody LeaveApplicationDto updatedLeaveApplication) {
-        if(leaveApplicationService.updateApplication(modelMapper.map(updatedLeaveApplication, LeaveApplication.class))){
-            return HttpStatus.OK;
+//    @PutMapping("/{id}")
+//    public HttpStatus updateApplication(@RequestBody LeaveApplicationDto updatedLeaveApplication) {
+//        if(leaveApplicationService.updateApplication(modelMapper.map(updatedLeaveApplication, LeaveApplication.class))){
+//            return HttpStatus.OK;
+//        }
+//        else{
+//            return HttpStatus.NOT_FOUND;
+//        }
+//    }
+
+    @PutMapping("/{id}")
+    public HttpStatus updateApplication(@RequestBody LeaveApplicationDto updatedapplication ,@PathVariable long id) {
+        String status = updatedapplication.getStatus();
+        LeaveApplication leaveApplication = leaveApplicationService.getApplication(id);
+        if(leaveApplication != null){
+            leaveApplication.setStatus(status);
+            if(leaveApplicationService.updateApplication(leaveApplication)){
+                return HttpStatus.OK;
+            }
+            else{
+                return HttpStatus.NOT_FOUND;
+            }
         }
         else{
             return HttpStatus.NOT_FOUND;
         }
+
     }
 
-    @PostMapping("/new-application")
+    @PostMapping
     public HttpStatus newApplication(@RequestBody LeaveApplicationDto updatedLeaveApplication) {
         if(leaveApplicationService.newApplication(modelMapper.map(updatedLeaveApplication, LeaveApplication.class))){
             return HttpStatus.OK;
@@ -42,7 +61,7 @@ public class LeaveApplicationController {
         }
     }
 
-    @GetMapping("/get-application/{id}")
+    @GetMapping("/{id}")
     public LeaveApplication getApplication(@PathVariable Long id) {
         LeaveApplication leaveApplication = leaveApplicationService.getApplication(id);
         if(leaveApplication != null){
@@ -50,6 +69,15 @@ public class LeaveApplicationController {
         }
         else{
             return null;
+        }
+    }
+    @DeleteMapping("/{id}")
+    public HttpStatus deleteApplication(@PathVariable Long id) {
+        if(leaveApplicationService.deleteApplication(id)){
+            return HttpStatus.OK;
+        }
+        else{
+            return HttpStatus.NOT_FOUND;
         }
     }
 }
