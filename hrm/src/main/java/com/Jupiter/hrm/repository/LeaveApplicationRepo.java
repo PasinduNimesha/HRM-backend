@@ -71,6 +71,28 @@ public class LeaveApplicationRepo {
         }
     }
 
+    public LeaveApplication getApplicationBySupervisor(int id){
+        try {
+            String query = "SELECT * FROM leave_application WHERE employee_id IN (SELECT employee_id FROM employee WHERE supervisor = ?)";
+            PreparedStatement preparedStatement = connection.prepareStatement(query);
+            preparedStatement.setInt(1, id);
+            return getLeaveApplication(new LeaveApplication(), preparedStatement.executeQuery());
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public LeaveApplication getApplicationByEmployee(int id){
+        try {
+            String query = "SELECT * FROM leave_application WHERE employee_id = ?";
+            PreparedStatement preparedStatement = connection.prepareStatement(query);
+            preparedStatement.setInt(1, id);
+            return getLeaveApplication(new LeaveApplication(), preparedStatement.executeQuery());
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     private LeaveApplication getLeaveApplication(LeaveApplication leaveApplication, ResultSet resultSet) {
         try {
             if (resultSet.next()) {
@@ -88,4 +110,7 @@ public class LeaveApplicationRepo {
             throw new RuntimeException(e);
         }
     }
+
+
+
 }

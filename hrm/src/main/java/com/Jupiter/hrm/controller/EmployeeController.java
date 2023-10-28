@@ -39,35 +39,10 @@ public class EmployeeController {
     public HttpStatus createEmployee(@RequestBody EmployeeDto employeeDto) {
         int employee_id = employeeDto.getEmployee_id();
         Long id = employeeService.createEmployee(modelMapper.map(employeeDto, Employee.class));
-//        employeeExtensionService.createEmployeeExtension(employeeDto.getInt_attributes(), employeeDto.getStr_attributes(), employeeDto.getDouble_attributes(), id);
-//        if(employeeDto.getInt_attributes() != null){
-//            for (Map.Entry<String, Integer> entry : employeeDto.getInt_attributes().entrySet()) {
-//                String key = entry.getKey();
-//                Integer value = entry.getValue();
-//                System.out.println("Key: " + key + ", Value: " + value);
-//            }
-//
-//        }
-//        if(employeeDto.getStr_attributes() != null){
-//            for (Map.Entry<String, String> entry : employeeDto.getStr_attributes().entrySet()) {
-//                String key = entry.getKey();
-//                String value = entry.getValue();
-//                System.out.println("Key: " + key + ", Value: " + value);
-//            }
-//
-//        }
-//        if(employeeDto.getDouble_attributes() != null){
-//            for (Map.Entry<String, Double> entry : employeeDto.getDouble_attributes().entrySet()) {
-//                String key = entry.getKey();
-//                Double value = entry.getValue();
-//                System.out.println("Key: " + key + ", Value: " + value);
-//            }
-//
-//        }
+
         return HttpStatus.CREATED;
     }
     @GetMapping
-//    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<List<Employee>> getAllEmployees() {
         List<Employee> employees = employeeService.getAllEmployees();
         return new ResponseEntity<>(employees, HttpStatus.OK);
