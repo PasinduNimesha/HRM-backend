@@ -3,6 +3,7 @@ import com.Jupiter.hrm.entity.Employee;
 import com.Jupiter.hrm.repository.EmployeeRepo;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.sql.*;
@@ -53,6 +54,10 @@ public class EmployeeService {
         else{
             return false;
         }
+    }
+
+    public List<Employee> getEmployeeByDepartment(int department_id){
+        return employeeRepo.findByDepartment(department_id);
     }
 
 

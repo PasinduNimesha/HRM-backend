@@ -1,5 +1,8 @@
 package com.Jupiter.hrm.repository;
 
+import com.Jupiter.hrm.dto.DepartmentGroup;
+import com.Jupiter.hrm.dto.JobTitleGroup;
+import com.Jupiter.hrm.dto.PayGradeGroup;
 import com.Jupiter.hrm.entity.Employee;
 import com.Jupiter.hrm.config.DbConfig;
 
@@ -50,6 +53,22 @@ public class EmployeeRepo {
             throw new RuntimeException(e);
         }
 
+    }
+
+    public List<Employee> findByDepartment(int department_id){
+        List<Employee> employeeList = new ArrayList<>();
+        try{
+            String sqlQuery = "SELECT * FROM employee WHERE department_id = ?";
+            PreparedStatement preparedStatement = connection.prepareStatement(sqlQuery);
+            preparedStatement.setInt(1, department_id);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                employeeList.add(getEmployee(new Employee(), resultSet));
+            }
+            return employeeList;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public List<Employee> findAllEmployees() {
@@ -165,4 +184,58 @@ public class EmployeeRepo {
 
     }
 
+    public List<JobTitleGroup> findGroupByJobTitle() {
+        try {
+            String sqlQuery = "select j.job_title as job_title, count(*) as count from employee e join job j on j.job_id = e.job_id group by j.job_id;";
+            PreparedStatement preparedStatement = connection.prepareStatement(sqlQuery);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            List<JobTitleGroup> jobTitleGroupList = new ArrayList<>();
+            while (resultSet.next()) {
+                JobTitleGroup jobTitleGroup = new JobTitleGroup();
+                jobTitleGroup.setJob_title(resultSet.getString("job_title"));
+                jobTitleGroup.setNumber_of_employees(resultSet.getInt("count"));
+                jobTitleGroupList.add(jobTitleGroup);
+            }
+            return jobTitleGroupList;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public List<PayGradeGroup> findGroupByPayGrade() {
+        try {
+            String sqlQuery = "select p.level as pay_grade, count(*) as count from employee e join job j on j.job_id = e.job_id join pay_grade p on p.pay_grade_id = j.pay_grade_id group by p.pay_grade_id;";
+            PreparedStatement preparedStatement = connection.prepareStatement(sqlQuery);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            List<PayGradeGroup> payGradeGroupList = new ArrayList<>();
+            while (resultSet.next()) {
+                PayGradeGroup payGradeGroup = new PayGradeGroup();
+                payGradeGroup.setPay_grade(resultSet.getString("pay_grade"));
+                payGradeGroup.setNumber_of_employees(resultSet.getInt("count"));
+                payGradeGroupList.add(payGradeGroup);
+            }
+            return payGradeGroupList;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public List<DepartmentGroup> findGroupByDepartment() {
+        try {
+            String sqlQuery = "select d.name as department_name, count(*) as count from employee e join job j on j.job_id = e.job_id join department d on d.department_id = j.department_id group by d.department_id;";
+            PreparedStatement preparedStatement = connection.prepareStatement(sqlQuery);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            List<DepartmentGroup> departmentGroupList = new ArrayList<>();
+            while (resultSet.next()) {
+                DepartmentGroup departmentGroup = new DepartmentGroup();
+                departmentGroup.setDepartment_name(resultSet.getString("department_name"));
+                departmentGroup.setNumber_of_employees(resultSet.getInt("count"));
+                departmentGroupList.add(departmentGroup);
+
+            }
+            return departmentGroupList;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }

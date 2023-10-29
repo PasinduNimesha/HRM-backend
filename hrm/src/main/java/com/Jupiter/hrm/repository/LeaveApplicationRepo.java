@@ -6,6 +6,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.HashMap;
 
 public class LeaveApplicationRepo {
 
@@ -50,8 +51,8 @@ public class LeaveApplicationRepo {
             PreparedStatement preparedStatement = connection.prepareStatement(query);
             preparedStatement.setLong(1, leaveApplication.getEmployee_id());
             preparedStatement.setLong(2, leaveApplication.getLeave_type_id());
-            preparedStatement.setString(3, leaveApplication.getStart_date());
-            preparedStatement.setString(4, leaveApplication.getEnd_date());
+            preparedStatement.setDate(3, java.sql.Date.valueOf(leaveApplication.getStart_date()));
+            preparedStatement.setDate(4, java.sql.Date.valueOf(leaveApplication.getEnd_date()));
             preparedStatement.setString(5, leaveApplication.getStatus());
             preparedStatement.executeUpdate();
             return true;
@@ -93,6 +94,26 @@ public class LeaveApplicationRepo {
         }
     }
 
+//    Total leaves in given period by department
+    public HashMap<String, Integer> getCountByDepartment(String start_date, String end_date){
+        try {
+            String query = "SELECT d.name, sum(l.end_date - l.start_date) as 'total leave'  from employee e join job j on e.job_id = j.job_id join leave_application l on e.employee_id = l.employee_id join department d on d.department_id = j.department_id where l.start_date >= ? and l.end_date <= ? and l.status = 'Approved' group by j.department_id;";
+            PreparedStatement preparedStatement = connection.prepareStatement(query);
+            preparedStatement.setString(1, start_date);
+            preparedStatement.setString(2, end_date);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            HashMap<String, Integer> map = new HashMap<>();
+            while (resultSet.next()) {
+                map.put(resultSet.getString("name"), resultSet.getInt("total leave"));
+            }
+            return map;
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+
     private LeaveApplication getLeaveApplication(LeaveApplication leaveApplication, ResultSet resultSet) {
         try {
             if (resultSet.next()) {
@@ -110,6 +131,8 @@ public class LeaveApplicationRepo {
             throw new RuntimeException(e);
         }
     }
+
+
 
 
 
