@@ -58,7 +58,7 @@ public class LeaveApplicationController {
         System.out.println("employee id: "+updatedLeaveApplication.getEmployee_id());
         System.out.println("leave type id: "+updatedLeaveApplication.getLeave_type_id());
         System.out.println("start date: "+updatedLeaveApplication.getStart_date());
-        System.out.println("end date: "+updatedLeaveApplication.getEnd_date());git
+        System.out.println("end date: "+updatedLeaveApplication.getEnd_date());
         System.out.println("status: "+updatedLeaveApplication.getStatus());
         if(leaveApplicationService.newApplication(modelMapper.map(updatedLeaveApplication, LeaveApplication.class))){
             return HttpStatus.OK;
