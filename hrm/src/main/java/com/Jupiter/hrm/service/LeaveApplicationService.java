@@ -57,4 +57,14 @@ public class LeaveApplicationService {
             return false;
         }
     }
+
+    public List<LeaveApplication> getApplicationsToUpdate(int id) {
+        List<LeaveApplication> leaveApplications = leaveApplicationRepo.getApplicationBySupervisor(id);
+        if(leaveApplications != null){
+            return leaveApplications;
+        }
+        else{
+            return null;
+        }
+    }
 }

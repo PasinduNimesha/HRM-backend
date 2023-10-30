@@ -34,6 +34,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 //                .antMatchers("/users/**").hasAnyAuthority("ADMIN", "LVL1USER")
 //                .antMatchers("/leaveapplication/**").hasAnyAuthority("ADMIN", "LVL1USER", "LVL2USER")
                 .antMatchers("/employees/**").permitAll()
+                .antMatchers("/leaveapplication/**").permitAll()
+                .antMatchers("/reports/**").permitAll()
 
 
 

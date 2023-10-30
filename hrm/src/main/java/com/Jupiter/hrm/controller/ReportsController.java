@@ -1,6 +1,7 @@
 package com.Jupiter.hrm.controller;
 
 
+import com.Jupiter.hrm.dto.Dates;
 import com.Jupiter.hrm.dto.DepartmentGroup;
 import com.Jupiter.hrm.dto.JobTitleGroup;
 import com.Jupiter.hrm.dto.PayGradeGroup;
@@ -32,9 +33,14 @@ public class ReportsController {
 //    Total leaves in given period by department
 
     @GetMapping("/leavesbydepartment")
-    public ResponseEntity<HashMap<String, Integer>> getLeavesByDepartment(@RequestBody HashMap<String, String> dates){
+    public ResponseEntity<HashMap<String, Integer>> getLeavesByDepartment(){
+        Dates dates = new Dates();
+        dates.setStart_date("2021-01-01");
+        dates.setEnd_date("2025-12-31");
+        System.out.println("start date: "+ dates.getStart_date());
+        System.out.println("end date: "+dates.getEnd_date());
 
-        HashMap<String, Integer> leaves = reportsService.getLeavesByDepartment(dates.get("start_date"), dates.get("end_date"));
+        HashMap<String, Integer> leaves = reportsService.getLeavesByDepartment(dates.getStart_date(), dates.getEnd_date());
         if (leaves != null){
             return ResponseEntity.ok(leaves);
         }

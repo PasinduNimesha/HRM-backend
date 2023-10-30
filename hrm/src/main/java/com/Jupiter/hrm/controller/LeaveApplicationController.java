@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 
 @RestController
 @RequestMapping("/leaveapplication")
@@ -53,6 +55,11 @@ public class LeaveApplicationController {
 
     @PostMapping
     public HttpStatus newApplication(@RequestBody LeaveApplicationDto updatedLeaveApplication) {
+        System.out.println("employee id: "+updatedLeaveApplication.getEmployee_id());
+        System.out.println("leave type id: "+updatedLeaveApplication.getLeave_type_id());
+        System.out.println("start date: "+updatedLeaveApplication.getStart_date());
+        System.out.println("end date: "+updatedLeaveApplication.getEnd_date());git
+        System.out.println("status: "+updatedLeaveApplication.getStatus());
         if(leaveApplicationService.newApplication(modelMapper.map(updatedLeaveApplication, LeaveApplication.class))){
             return HttpStatus.OK;
         }
@@ -62,10 +69,10 @@ public class LeaveApplicationController {
     }
 
     @GetMapping("/{id}")
-    public LeaveApplication getApplication(@PathVariable Long id) {
-        LeaveApplication leaveApplication = leaveApplicationService.getApplication(id);
-        if(leaveApplication != null){
-            return leaveApplication;
+    public List<LeaveApplication> getApplicationToUpdate(@PathVariable int id) {
+        List<LeaveApplication> applications= leaveApplicationService.getApplicationsToUpdate(id);
+        if(applications != null){
+            return applications;
         }
         else{
             return null;

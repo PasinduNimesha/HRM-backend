@@ -6,7 +6,9 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 public class LeaveApplicationRepo {
 
@@ -72,12 +74,22 @@ public class LeaveApplicationRepo {
         }
     }
 
-    public LeaveApplication getApplicationBySupervisor(int id){
+    public List<LeaveApplication> getApplicationBySupervisor(int id){
         try {
             String query = "SELECT * FROM leave_application WHERE employee_id IN (SELECT employee_id FROM employee WHERE supervisor = ?)";
             PreparedStatement preparedStatement = connection.prepareStatement(query);
             preparedStatement.setInt(1, id);
-            return getLeaveApplication(new LeaveApplication(), preparedStatement.executeQuery());
+            List<LeaveApplication> leaveApplications = new ArrayList<>();
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (true) {
+                LeaveApplication leaveApplication = new LeaveApplication();
+                leaveApplication = getLeaveApplication(leaveApplication, resultSet);
+                if (leaveApplication == null) {
+                    break;
+                }
+                leaveApplications.add(leaveApplication);
+            }
+            return leaveApplications;
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
