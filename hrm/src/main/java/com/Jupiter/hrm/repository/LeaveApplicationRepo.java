@@ -76,7 +76,7 @@ public class LeaveApplicationRepo {
 
     public List<LeaveApplication> getApplicationBySupervisor(int id){
         try {
-            String query = "SELECT * FROM leave_application WHERE employee_id IN (SELECT employee_id FROM employee WHERE supervisor = ?) status = 'Pending'";
+            String query = "SELECT * FROM leave_application WHERE employee_id IN (SELECT employee_id FROM employee WHERE supervisor = ?) and status = 'Pending'";
             PreparedStatement preparedStatement = connection.prepareStatement(query);
             preparedStatement.setInt(1, id);
             List<LeaveApplication> leaveApplications = new ArrayList<>();
